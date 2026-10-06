@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Add Author | My Library{% endblock %}
+
+{% block content %}
+
+<section class="author-form">
+
+    <h1 class="author-form__title mb-4">Add Author</h1>
+
+    {% if message %}
+        <div class="alert alert-success author-form__message">
+            {{ message }}
+        </div>
+    {% endif %}
+
+    <form class="author-form__form" action="/add_author" method="POST">
+
+        <div class="mb-3 author-form__field">
+            <label class="form-label" for="name">Author Name</label>
+            <input
+                class="form-control"
+                type="text"
+                id="name"
+                name="name"
+                required
+            >
+        </div>
+
+        <div class="mb-3 author-form__field">
+            <label class="form-label" for="birth_date">Birthdate</label>
+            <input
+                class="form-control"
+                type="date"
+                id="birth_date"
+                name="birth_date"
+                required
+            >
+        </div>
+
+        <div class="mb-3 author-form__field">
+            <label class="form-label" for="date_of_death">Date of Death</label>
+            <input
+                class="form-control"
+                type="date"
+                id="date_of_death"
+                name="date_of_death"
+            >
+        </div>
+
+        <button class="btn btn-primary author-form__submit" type="submit">
+            Add Author
+        </button>
+
+    </form>
+
+</section>
+
+{% endblock %}

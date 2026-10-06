@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}Add Book | My Library{% endblock %}
+
+{% block content %}
+
+<section class="book-form">
+
+    <h1 class="book-form__title mb-4">Add Book</h1>
+
+    {% if message %}
+        <div class="alert alert-success book-form__message">
+            {{ message }}
+        </div>
+    {% endif %}
+
+    <form class="book-form__form" action="/add_book" method="POST">
+
+        <div class="mb-3 book-form__field">
+            <label class="form-label" for="isbn">ISBN</label>
+            <input
+                class="form-control"
+                type="text"
+                id="isbn"
+                name="isbn"
+                required
+            >
+        </div>
+
+        <div class="mb-3 book-form__field">
+            <label class="form-label" for="title">Title</label>
+            <input
+                class="form-control"
+                type="text"
+                id="title"
+                name="title"
+                required
+            >
+        </div>
+
+        <div class="mb-3 book-form__field">
+            <label class="form-label" for="publication_year">
+                Publication Year
+            </label>
+
+            <input
+                class="form-control"
+                type="number"
+                id="publication_year"
+                name="publication_year"
+                required
+            >
+        </div>
+
+        <div class="mb-3 book-form__field">
+            <label class="form-label" for="author_id">Author</label>
+
+            <select
+                class="form-select"
+                id="author_id"
+                name="author_id"
+                required
+            >
+                <option value="" selected disabled>
+                    Choose an author
+                </option>
+
+                {% for author in authors %}
+                    <option value="{{ author.id }}">
+                        {{ author.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button
+            class="btn btn-primary book-form__submit"
+            type="submit"
+        >
+            Add Book
+        </button>
+
+    </form>
+
+</section>
+
+{% endblock %}

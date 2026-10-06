@@ -31,6 +31,8 @@ class Book(db.Model):
         nullable=False
     )
 
+    author = db.relationship("Author", backref="books")
+
     def __str__(self):
         return self.title
 
