@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from data_models import db, Author, Book
 from sqlalchemy import or_
 
@@ -95,6 +95,7 @@ def add_author():
         message=message,
         error=error
     )
+
 @app.route("/add_book", methods=["GET", "POST"])
 def add_book():
     message = None
@@ -136,6 +137,36 @@ def add_book():
         error=error
     )
 
+@app.route("/book/<int:book_id>/delete", methods=["POST"])
+def delete_book(book_id):
+    book = db.session.execute(
+        db.select(Book).where(Book.id == book_id)
+    ).scalar_one_or_none()
+    if book:
+        db.session.delete(book)
+        db.session.commit()
+
+    return redirect(url_for("home"))
+
+@app.route("/book/<int:book_id>")
+def get_book(book_id):
+    book = db.session.execute(
+        db.select(Book).where(Book.id == book_id)
+    ).scalar_one_or_none()
+
+    return render_template(
+        "book_detail.html", book=book
+    )
+
+@app.route("/author/<int:author_id>")
+def get_author(author_id):
+    author = db.session.execute(
+        db.select(Author).where(Author.id == author_id)
+    ).scalar_one_or_none()
+
+    return render_template(
+        "author_detail.html", author=author
+    )
 
 with app.app_context():
     db.create_all()

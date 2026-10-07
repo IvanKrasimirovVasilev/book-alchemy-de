@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }} | My Library{% endblock %}
+
+{% block content %}
+
+<main class="book-detail">
+    <article class="card shadow-sm">
+        <div class="card-body">
+
+            <header class="mb-4">
+                <h1 class="card-title">{{ book.title }}</h1>
+                <p class="text-muted mb-0">
+                    by {{ book.author.name }} <br>
+                    ( {{ book.author.birth_date.strftime('%d %B %Y') }} –
+                    {% if book.author.date_of_death %}
+                        {{ book.author.date_of_death.strftime('%d %B %Y') }}
+                    {% else %}
+                        present
+                    {% endif %})
+                </p>
+            </header>
+
+            <section aria-labelledby="book-information">
+                <h2 id="book-information" class="h5 mb-3">
+                    Book Information
+                </h2>
+
+                <dl class="row">
+                    <dt class="col-sm-3">ISBN</dt>
+                    <dd class="col-sm-9">{{ book.isbn }}</dd>
+
+                    <dt class="col-sm-3">Author</dt>
+                    <dd class="col-sm-9">{{ book.author.name }}</dd>
+
+                    <dt class="col-sm-3">Publication Year</dt>
+                    <dd class="col-sm-9">{{ book.publication_year }}</dd>
+                </dl>
+            </section>
+
+            <footer class="mt-4">
+                <a href="{{ url_for('home') }}"
+                   class="btn btn-outline-primary">
+                    Back to Library
+                </a>
+            </footer>
+
+        </div>
+    </article>
+</main>
+
+{% endblock %}
