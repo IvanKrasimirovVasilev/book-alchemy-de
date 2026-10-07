@@ -25,17 +25,34 @@
                 <h2 id="book-information" class="h5 mb-3">
                     Book Information
                 </h2>
+                <div class="row align-items-start g-4">
 
-                <dl class="row">
-                    <dt class="col-sm-3">ISBN</dt>
-                    <dd class="col-sm-9">{{ book.isbn }}</dd>
+                    <!-- Book cover -->
+                    <div class="col-md-3">
+                        <div class="book-cover">
+                            <img
+                                src="https://covers.openlibrary.org/b/isbn/{{ book.isbn }}-L.jpg?default=false"
+                                onerror="this.onerror=null; this.src='{{ url_for('static', filename='images/no-cover.jpg') }}';"
+                                alt="Cover of {{ book.title }}"
+                                class="rounded shadow-sm"
+                            >
+                        </div>
+                    </div>
+                    <!-- Book information -->
+                    <div class="col-md-9">
+                        <dl class="row">
+                            <dt class="col-sm-4">ISBN</dt>
+                            <dd class="col-sm-8">{{ book.isbn }}</dd>
 
-                    <dt class="col-sm-3">Author</dt>
-                    <dd class="col-sm-9">{{ book.author.name }}</dd>
+                            <dt class="col-sm-4">Author</dt>
+                            <dd class="col-sm-8">{{ book.author.name }}</dd>
 
-                    <dt class="col-sm-3">Publication Year</dt>
-                    <dd class="col-sm-9">{{ book.publication_year }}</dd>
-                </dl>
+                            <dt class="col-sm-4">Publication Year</dt>
+                            <dd class="col-sm-8">{{ book.publication_year }}</dd>
+                        </dl>
+                    </div>
+
+                </div>
             </section>
 
             <footer class="mt-4">
