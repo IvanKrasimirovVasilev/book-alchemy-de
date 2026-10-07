@@ -1,12 +1,13 @@
 import os
 from datetime import datetime
 
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from data_models import db, Author, Book
 from sqlalchemy import or_
 
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = "dev-secret-key"
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -34,7 +35,7 @@ def home():
         statement = statement.order_by(Book.publication_year)
 
     if sort == 'newest':
-        statement = statement.where(Book.publication_year > 2000).order_by(Book.publication_year)
+        statement = statement.where(Book.publication_year > 2000).order_by(Book.publication_year.desc())
 
     if search:
         statement = statement.join(Author).where(
@@ -145,6 +146,7 @@ def delete_book(book_id):
     if book:
         db.session.delete(book)
         db.session.commit()
+        flash("Book deleted successfully!", "success")
 
     return redirect(url_for("home"))
 
@@ -167,6 +169,18 @@ def get_author(author_id):
     return render_template(
         "author_detail.html", author=author
     )
+
+@app.route("/author/<int:author_id>/delete", methods=["POST"])
+def delete_author(author_id):
+    author = db.session.execute(
+        db.select(Author).where(Author.id == author_id)
+    ).scalar_one_or_none()
+    if author:
+        db.session.delete(author)
+        db.session.commit()
+        flash("Author and their books deleted successfully!", "success")
+
+    return redirect(url_for("home"))
 
 with app.app_context():
     db.create_all()
