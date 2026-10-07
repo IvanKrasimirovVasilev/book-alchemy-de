@@ -14,10 +14,16 @@
         </div>
     {% endif %}
 
+    {% if error %}
+        <div class="alert alert-danger book-form__message">
+            {{ error }}
+        </div>
+    {% endif %}
+
     <form class="book-form__form" action="/add_book" method="POST">
 
         <div class="mb-3 book-form__field">
-            <label class="form-label" for="isbn">ISBN</label>
+            <label class="form-label" for="isbn">ISBN*</label>
             <input
                 class="form-control"
                 type="text"
@@ -28,7 +34,7 @@
         </div>
 
         <div class="mb-3 book-form__field">
-            <label class="form-label" for="title">Title</label>
+            <label class="form-label" for="title">Title*</label>
             <input
                 class="form-control"
                 type="text"
@@ -40,7 +46,7 @@
 
         <div class="mb-3 book-form__field">
             <label class="form-label" for="publication_year">
-                Publication Year
+                Publication Year*
             </label>
 
             <input
@@ -53,7 +59,7 @@
         </div>
 
         <div class="mb-3 book-form__field">
-            <label class="form-label" for="author_id">Author</label>
+            <label class="form-label" for="author_id">Author*</label>
 
             <select
                 class="form-select"
