@@ -1,9 +1,11 @@
+"""Database models for authors and books."""
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
 
 class Author(db.Model):
+    """Represents an author in the library."""
     __tablename__ = "authors"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -24,6 +26,7 @@ class Author(db.Model):
         return f"Author(id={self.id}, name='{self.name}')"
 
 class Book(db.Model):
+    """Represents a book in the library."""
     __tablename__ = "books"
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

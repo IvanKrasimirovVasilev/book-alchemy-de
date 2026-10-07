@@ -1,10 +1,11 @@
+"""Flask application for managing a personal book library."""
 import os
 from datetime import datetime
 
 from flask import Flask, render_template, request, redirect, url_for, flash
-from data_models import db, Author, Book
 from sqlalchemy import or_
 
+from data_models import db, Author, Book
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "dev-secret-key"
@@ -20,6 +21,7 @@ db.init_app(app)
 
 @app.route("/")
 def home():
+    """Display, search, and sort all books."""
     sort = request.args.get("sort")
     search = request.args.get("search")
 
@@ -35,7 +37,10 @@ def home():
         statement = statement.order_by(Book.publication_year)
 
     if sort == 'newest':
-        statement = statement.where(Book.publication_year > 2000).order_by(Book.publication_year.desc())
+        statement = (
+            statement
+            .where(Book.publication_year > 2000)
+            .order_by(Book.publication_year.desc()))
 
     if search:
         statement = statement.join(Author).where(
@@ -52,6 +57,7 @@ def home():
 
 @app.route("/add_author", methods=["GET", "POST"])
 def add_author():
+    """Add a new author to the library."""
     message = None
     error = None
 
@@ -99,6 +105,7 @@ def add_author():
 
 @app.route("/add_book", methods=["GET", "POST"])
 def add_book():
+    """Add a new book to the library."""
     message = None
     error = None
 
@@ -140,6 +147,7 @@ def add_book():
 
 @app.route("/book/<int:book_id>/delete", methods=["POST"])
 def delete_book(book_id):
+    """Delete a book from the library."""
     book = db.session.execute(
         db.select(Book).where(Book.id == book_id)
     ).scalar_one_or_none()
@@ -152,6 +160,7 @@ def delete_book(book_id):
 
 @app.route("/book/<int:book_id>")
 def get_book(book_id):
+    """Display the details of a book."""
     book = db.session.execute(
         db.select(Book).where(Book.id == book_id)
     ).scalar_one_or_none()
@@ -162,6 +171,7 @@ def get_book(book_id):
 
 @app.route("/author/<int:author_id>")
 def get_author(author_id):
+    """Display the details of an author."""
     author = db.session.execute(
         db.select(Author).where(Author.id == author_id)
     ).scalar_one_or_none()
@@ -172,6 +182,7 @@ def get_author(author_id):
 
 @app.route("/author/<int:author_id>/delete", methods=["POST"])
 def delete_author(author_id):
+    """Delete an author and their associated books."""
     author = db.session.execute(
         db.select(Author).where(Author.id == author_id)
     ).scalar_one_or_none()
