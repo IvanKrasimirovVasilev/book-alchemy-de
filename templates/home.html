@@ -8,6 +8,36 @@
 
     <h1 class="library__title mb-4">My Library</h1>
 
+    <div class="library__sorting mb-3">
+        <a href="{{ url_for('home', sort='title') }}" class="btn btn-outline-primary {% if sort == 'title' %}active{% endif %}">
+            Sort by Title
+        </a>
+        <a href="{{ url_for('home', sort='author') }}" class="btn btn-outline-primary {% if sort == 'author' %}active{% endif %}">
+            Sort by Author
+        </a>
+        <a href="{{ url_for('home', sort='year') }}" class="btn btn-outline-primary {% if sort == 'year' %}active{% endif %}">
+            Sort by year
+        </a>
+        <a href="{{ url_for('home', sort='newest') }}" class="btn btn-outline-primary {% if sort == 'newest' %}active{% endif %}">
+            Show Books Published After 2000
+        </a>
+    </div>
+    <div class="library__sorting mb-3">
+        <form method="GET" class="mb-3">
+            <div class="input-group" style="max-width: 400px;">
+                <input
+                    type="text"
+                    name="search"
+                    class="form-control"
+                    placeholder="Search books..."
+                >
+                <button type="submit" class="btn btn-primary">
+                    Search
+                </button>
+            </div>
+        </form>
+    </div>
+
     <div class="table-responsive library__table-wrapper">
         <table class="table table-striped table-hover library__table">
             <thead>
@@ -28,6 +58,12 @@
                         <td>{{ book.title }}</td>
                         <td>{{ book.publication_year }}</td>
                         <td>{{ book.author.name }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            No books found.
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>

@@ -3,6 +3,7 @@ from datetime import datetime
 
 from flask import Flask, render_template, request
 from data_models import db, Author, Book
+from sqlalchemy import or_
 
 
 app = Flask(__name__)
@@ -18,11 +19,35 @@ db.init_app(app)
 
 @app.route("/")
 def home():
+    sort = request.args.get("sort")
+    search = request.args.get("search")
+
+    statement = db.select(Book)
+
+    if sort == "title":
+        statement = statement.order_by(Book.title)
+
+    if sort == 'author':
+        statement = statement.join(Author).order_by(Author.name)
+
+    if sort == "year":
+        statement = statement.order_by(Book.publication_year)
+
+    if sort == 'newest':
+        statement = statement.where(Book.publication_year > 2000).order_by(Book.publication_year)
+
+    if search:
+        statement = statement.join(Author).where(
+            or_(
+                Book.title.ilike(f"%{search}%"),
+                Author.name.ilike(f"%{search}%"))
+            )
+
     books = db.session.execute(
-        db.select(Book)
+        statement
     ).scalars().all()
 
-    return render_template("home.html", books=books)
+    return render_template("home.html", books=books, sort=sort)
 
 @app.route("/add_author", methods=["GET", "POST"])
 def add_author():
